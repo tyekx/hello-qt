@@ -1,7 +1,13 @@
 import QtQuick
 import QtQuick.Controls
+import HelloContext 1.0
 
 Window {
+
+    HelloContext {
+        id: helloContext
+    }
+    
     width: 640
     height: 480
     visible: true
@@ -11,7 +17,7 @@ Window {
         text: "Click Me"
         anchors.centerIn: parent
         onClicked: {
-            console.log("Button clicked!")
+            console.log(helloContext.greet("Dispatch from QML"));
         }
     }
 }

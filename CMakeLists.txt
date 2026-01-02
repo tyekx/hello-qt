@@ -9,7 +9,7 @@ find_package(Qt6 6.4 REQUIRED COMPONENTS Quick)
 qt_standard_project_setup()
 
 qt_add_executable(apphelloqt
-    main.cpp
+    main.cpp HelloContext.cpp
 )
 
 qt_add_qml_module(apphelloqt
