@@ -1,6 +1,6 @@
-import QtQuick
-import QtQuick.Controls
-import QtQuick.Layouts
+import QtQuick 6.4
+import QtQuick.Controls 6.4
+import QtQuick.Layouts 6.4
 import HelloContext 1.0
 
 Window {
@@ -42,6 +42,7 @@ Window {
                 Layout.fillWidth: true
                 color: "green"
 
+                /*
                 TableView {
                     id: _tableView
                     anchors.fill: parent
@@ -80,6 +81,23 @@ Window {
                         }
                     }
                 }
+                */
+
+                ListView {
+                    id: _listView
+                    anchors.fill: parent
+                    model: ComplexListModel { }
+
+                    delegate: Rectangle {
+                        implicitWidth: 120
+                        implicitHeight: 32
+
+                        Text {
+                            text: "(" + modelData.x + ", " + modelData.y + ")"
+                        }
+                    }
+                }
+
             }
 
             Rectangle {
@@ -88,10 +106,21 @@ Window {
                 
                 color: "yellow"
 
-                Button {
-                    text: "New Item"
+                RowLayout { 
+                    
+                    Button {
+                        text: "Zero Selected"
+                    }
 
+                    Button {
+                        text: "Clear Selection"
+                    }
+
+                    Button {
+                        text: "Delete Selected"
+                    }
                 }
+                    
             }
         }
 
@@ -102,6 +131,16 @@ Window {
             Layout.fillHeight: true
 
             color: "orange"
+
+            MouseArea {
+
+                anchors.fill: parent
+
+                onClicked: (evt) => {
+                    _listView.model.addPoint(evt.x, evt.y);
+                }
+
+            }
 
         }
 

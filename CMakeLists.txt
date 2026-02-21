@@ -11,6 +11,7 @@ qt_standard_project_setup()
 qt_add_executable(apphelloqt
     main.cpp HelloContext.cpp
     MyTableModel.cpp
+    ComplexListModel.cpp
 )
 
 qt_add_qml_module(apphelloqt
