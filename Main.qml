@@ -5,145 +5,48 @@ import HelloContext 1.0
 
 Window {
 
-    HelloContext {
-        id: helloContext
-    }
+    property var context: HelloContext {}
     
     width: 640
     height: 480
     visible: true
     title: qsTr("Hello World")
 
-    RowLayout {
+    Button {
+        id: _button
+        property var task: null
 
-        anchors.fill: parent
-        spacing: 0
-            
-        ColumnLayout {
-
-            Layout.fillHeight: true
-            Layout.preferredWidth: 320
-            Layout.fillWidth: false
-            spacing: 0
-
-            Rectangle {
-                Layout.fillWidth: true
-                Layout.preferredHeight: 60
-
-                color: "yellow"
-
-                Text {
-                    text: "Header"
-                }
-            }
-
-            Rectangle {
-                Layout.fillHeight: true
-                Layout.fillWidth: true
-                color: "green"
-
-                /*
-                TableView {
-                    id: _tableView
-                    anchors.fill: parent
-                    columnSpacing: 0
-                    rowSpacing: 0
-
-                    model: MyTableModel {}
-
-                    selectionBehavior: TableView.SelectCells
-                    selectionModel: ItemSelectionModel {
-                        id: _tableViewSelection
-                        model: _tableView.model
-                    }
-
-                    delegate: Rectangle {
-                        required property bool selected
-                        required property int row
-                        required property int column
-                        implicitWidth: 120
-                        implicitHeight: 32
-                        color: selected ? "#87cefa" : "white"
-
-                        Text {
-                            text: display + ": " + selected
-                        }
-
-                        MouseArea {
-                            anchors.fill: parent
-                            onClicked: {
-                                let index = _tableView.model.index(row, column)
-
-                                _tableViewSelection.setCurrentIndex(index, ItemSelectionModel.NoUpdate)
-
-                                _tableViewSelection.select(index, ItemSelectionModel.ClearAndSelect | ItemSelectionModel.Rows)
-                            }
-                        }
-                    }
-                }
-                */
-
-                ListView {
-                    id: _listView
-                    anchors.fill: parent
-                    model: ComplexListModel { }
-
-                    delegate: Rectangle {
-                        implicitWidth: 120
-                        implicitHeight: 32
-
-                        Text {
-                            text: "(" + modelData.x + ", " + modelData.y + ")"
-                        }
-                    }
-                }
-
-            }
-
-            Rectangle {
-                Layout.fillWidth: true
-                Layout.preferredHeight: 60
-                
-                color: "yellow"
-
-                RowLayout { 
-                    
-                    Button {
-                        text: "Zero Selected"
-                    }
-
-                    Button {
-                        text: "Clear Selection"
-                    }
-
-                    Button {
-                        text: "Delete Selected"
-                    }
-                }
-                    
+        text: (task) ? "Running: " + task.progress.toFixed(2) + "%" : "Start Task"
+        onClicked: {
+            if (!task) {
+                task = context.dispatch()
+            } else {
+                task.cancel()
             }
         }
 
-        Rectangle {
-
-            Layout.fillWidth: true
-            Layout.preferredWidth: 320
-            Layout.fillHeight: true
-
-            color: "orange"
-
-            MouseArea {
-
-                anchors.fill: parent
-
-                onClicked: (evt) => {
-                    _listView.model.addPoint(evt.x, evt.y);
-                }
-
+        Connections {
+            target: _button.task
+            function onFinished() {
+                console.log("Task finished")
+                _button.task = null
             }
 
+            function onCanceled() {
+                console.log("Task canceled")
+                _button.task = null
+            }
         }
+    }
 
+    Dialog {
+        id: dialog
+        title: "Title"
+        modal: true
+        standardButtons: Dialog.Ok | Dialog.Cancel
+
+        onAccepted: console.log("Ok clicked")
+        onRejected: console.log("Cancel clicked")
     }
 
 }

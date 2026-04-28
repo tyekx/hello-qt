@@ -4,14 +4,12 @@ project(helloqt VERSION 0.1 LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-find_package(Qt6 6.4 REQUIRED COMPONENTS Quick)
+find_package(Qt6 6.10 REQUIRED COMPONENTS Quick Concurrent PATHS ~/Qt/6.10.2/gcc_64)
 
 qt_standard_project_setup()
 
 qt_add_executable(apphelloqt
     main.cpp HelloContext.cpp
-    MyTableModel.cpp
-    ComplexListModel.cpp
 )
 
 qt_add_qml_module(apphelloqt
@@ -35,7 +33,7 @@ set_target_properties(apphelloqt PROPERTIES
 )
 
 target_link_libraries(apphelloqt
-    PRIVATE Qt6::Quick
+    PRIVATE Qt6::Quick Qt6::Concurrent
 )
 
 include(GNUInstallDirs)
